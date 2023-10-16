@@ -1,0 +1,65 @@
+{% extends "masterPage.html"%}
+{% block script %}
+<script>
+async function fetchPolicyData() {
+        const policyId = document.getElementById('policy').value;
+        const serial = $("#switch-serial").text().trim();
+        console.log(serial)
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/${serial}/get-policy/${policyId}`);
+            const data = await response.json();
+
+            // Assuming the endpoint returns the policy data in a 'policyData' field
+            document.getElementById('config').value = data.current_config;
+        } catch (error) {
+            console.error('Error fetching policy data:', error);
+        }
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div style="display: none" id="switch-serial">{{serial}}</div>
+<div class="col-md-8 col-lg-9 col-xl-10 offset-xl-2 offset-lg-3">
+    <form method="post" action="/device/{{ serial }}/policy/edit">
+        <div class="tab-content">
+            <div class="tab-pane active animated fadeIn section no-padding" id="general">
+                <div class="section section--compressed non-removable">
+                    <div class="row">
+                        <div class="col" id="left-column">
+                            <h2 class="display-3 no-margin half-margin-bottom text-capitalize flex-fluid">Edit Device Policy</h2>
+                            <div class="panel-body" id="nad-options-panel">
+                                <div class="flex half-margin-bottom">
+                                    <div class="form-group half-margin-right flex-fill">
+                                        <div class="form-group__text">
+                                            <select id="policy" name="policy"onchange="fetchPolicyData()" >
+                                                {% for policy in policies %}
+                                                    <option value="{{ policy.policyId }}">{{ policy.policyId }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <label for="policy">Available Policies
+                                                <span class="text-xsmall"> (Policy ID)</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex half-margin-bottom">
+                                    <div class="form-group half-margin-right flex-fill">
+                                        <div class="form-group__text">
+                                            <label for="config">Configuration</label>
+                                            <textarea id="config" rows="5" cols="40" name="config" placeholder="Replace configuration"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section section--compressed non-removable base-margin-bottom">
+            <div class="text-center" style="margin-right:10%">
+                <button type="submit" class="btn btn--primary" name="submit" value="1">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

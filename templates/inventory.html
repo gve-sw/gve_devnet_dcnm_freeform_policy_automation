@@ -1,0 +1,37 @@
+{% extends "masterPage.html"%}
+{% block content %}
+<div class="col-md-8 col-lg-9 col-xl-10 offset-xl-2 offset-lg-3">
+	<form method="post" action="/device/policy">
+		 <div class="tab-content"> <div class="tab-pane active animated fadeIn section no-padding" id="general">
+             <div class="section section--compressed non-removable">
+                 <div class="row">
+                     <div class="col" id="left-column">
+                         <h2 class="display-3 no-margin half-margin-bottom text-capitalize flex-fluid">Select Fabric Device</h2>
+                         <div class="panel-body" id="nad-options-panel">
+                             <div class="flex half-margin-bottom">
+                                 <div class="form-group half-margin-right flex-fill">
+                                     <div class="form-group__text">
+                                        <select id="device" name="device">
+                                            {% for switch in switches %}
+                                                <option value="{{ switch.serialNumber }}">{{ switch.logicalName }}</option>
+                                            {% endfor %}
+                                        </select>
+                                         <label for="device">Available Inventory<span class="text-xsmall"> (Device Name)</span></label>
+                                    </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         </div>
+        <div class="section section--compressed non-removable base-margin-bottom">
+            <div class="text-center" style="margin-right:10%">
+                <button type="submit" class="btn btn--primary" name="submit" value="1" >Submit</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% endblock %}
